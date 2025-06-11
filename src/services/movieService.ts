@@ -1,40 +1,35 @@
-import { Movie } from '../types/movie';
+import axios from 'axios';
+import type { Movie } from '../types/movie';
 
-const movies: Movie[] = [
-  {
-    id: '1',
-    title: 'The Shawshank Redemption',
-    posterUrl: 'https://example.com/shawshank.jpg',
-    year: '1994',
-    genre: 'Drama',
-    director: 'Frank Darabont',
-    plot: 'Two imprisoned men bond over a number of years...',
-    rating: '9.3',
-  },
-  {
-    id: '2',
-    title: 'The Godfather',
-    posterUrl: 'https://example.com/godfather.jpg',
-    year: '1972',
-    genre: 'Crime, Drama',
-    director: 'Francis Ford Coppola',
-    plot: 'The aging patriarch of an organized crime dynasty...',
-    rating: '9.2',
-  },
-];
+export interface FetchMoviesResponse {
+  results: Movie[];
+  total_pages: number;
+}
 
-export const getMovies = async (): Promise<Movie[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(movies);
-    }, 500);
-  });
-};
+export const fetchMovies = async (
+  query: string,
+  page: number = 1
+): Promise<FetchMoviesResponse> => {
+  const token = import.meta.env.VITE_TMDB_TOKEN;
 
-export const getMovieById = async (id: string): Promise<Movie | undefined> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(movies.find((movie) => movie.id === id));
-    }, 500);
-  });
+  if (!token) {
+    throw new Error('TMDB API token is missing');
+  }
+
+  const response = await axios.get<FetchMoviesResponse>(
+    'https://api.themoviedb.org/3/search/movie',
+    {
+      params: {
+        query,
+        include_adult: false,
+        language: 'en-US',
+        page,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
 };

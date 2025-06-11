@@ -8,3 +8,8 @@ export interface Movie {
   plot: string;
   rating: string;
 }
+
+export interface MovieApiResponse {
+  results: Movie[];
+  total_pages: number;
+}
