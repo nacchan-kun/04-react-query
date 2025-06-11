@@ -3,7 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import { useQuery } from "@tanstack/react-query";
 
-import type { Movie, MovieApiResponse } from "../../types/movie";
+import type { Movie, MovieApiResponse } from "../../types/movie"; // ✅ Corrected type
 import { fetchMovies } from "../../services/movieService";
 
 import SearchBar from "../SearchBar/SearchBar";
