@@ -6,11 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import type { Movie, MovieApiResponse } from "../../types/movie";
 import { fetchMovies } from "../../services/movieService";
 
-import SearchBar from "../../components/SearchBar/SearchBar";
-import MovieGrid from "../../components/MovieGrid/MovieGrid";
-import MovieModal from "../../components/MovieModal/MovieModal";
-import Loader from "../../components/Loader/Loader";
-import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import SearchBar from "../SearchBar/SearchBar";
+import MovieGrid from "../MovieGrid/MovieGrid";
+import MovieModal from "../MovieModal/MovieModal";
+import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import css from "./App.module.css";
 
@@ -18,7 +18,6 @@ function App() {
   const [query, setQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-
 
   const {
     data,
@@ -28,13 +27,12 @@ function App() {
   } = useQuery<MovieApiResponse>({
     queryKey: ["movies", query, page],
     queryFn: () => fetchMovies(query, page),
-    enabled: query.length > 0,
+    enabled: query.trim().length > 0,
     keepPreviousData: true,
     onError: () => {
       toast.error("Something went wrong. Please try again.");
     },
   });
-
 
   const handleSearch = (formData: FormData) => {
     const searchQuery = formData.get("query") as string;
@@ -44,9 +42,8 @@ function App() {
       return;
     }
 
-   
+    setQuery(searchQuery.trim());
     setPage(1);
-  
   };
 
   const handlePageChange = ({ selected }: { selected: number }) => {
@@ -67,7 +64,7 @@ function App() {
         <p>No movies found for your request.</p>
       )}
 
-      {!isLoading && !isError && data && data.results.length > 0 && (
+      {!isLoading && !isError && data?.results.length > 0 && (
         <>
           <MovieGrid
             movies={data.results}
