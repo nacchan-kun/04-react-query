@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "composite": true,
+    "composite": true,               // MUST BE TRUE
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "types": ["node"] // This is crucial for Node.js related types
+    "types": ["node"],               // Keep this as you need Node.js types for vite.config.ts
+    "declaration": true,             // ADD THIS: Required for composite projects to emit types
+    "emitDeclarationOnly": true,     // ADD THIS: Only emit .d.ts files, not .js files. This resolves the "may not disable emit" error.
+    "outDir": "./dist/types/node"    // OPTIONAL but Recommended: Specify an output directory for these declarations
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts"]      // Only include your Vite config here
 }
