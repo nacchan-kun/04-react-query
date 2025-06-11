@@ -19,20 +19,18 @@ function App() {
   const [page, setPage] = useState<number>(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  const {
-    data,
-    isLoading,
-    isError,
-    isFetching,
-  } = useQuery<MovieApiResponse>({
-    queryKey: ["movies", query, page],
-    queryFn: () => fetchMovies(query, page),
-    enabled: query.trim().length > 0,
-    keepPreviousData: true,
-    onError: () => {
-      toast.error("Something went wrong. Please try again.");
-    },
-  });
+
+
+ const { data, isLoading, isError, isFetching } = useQuery<MovieApiResponse>({
+  queryKey: ["movies", query, page],
+  queryFn: () => fetchMovies(query, page),
+  enabled: query.trim().length > 0,
+  keepPreviousData: true,
+  onError: () => {
+    toast.error("Something went wrong. Please try again.");
+  },
+});
+
 
   const handleSearch = (formData: FormData) => {
     const searchQuery = formData.get("query") as string;
