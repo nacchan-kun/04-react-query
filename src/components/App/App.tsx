@@ -19,25 +19,21 @@ function App() {
   const [page, setPage] = useState<number>(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  // Запит з react-query, виконуємо лише якщо query не пустий
   const {
     data,
     isLoading,
     isError,
     isFetching,
-  } = useQuery<MovieApiResponse>(
-    ["movies", query, page],
-    () => fetchMovies(query, page),
-    {
-      enabled: query.length > 0, // запускаємо запит лише якщо є пошуковий запит
-      keepPreviousData: true,
-      onError: () => {
-        toast.error("Something went wrong. Please try again.");
-      },
-    }
-  );
+  } = useQuery<MovieApiResponse>({
+    queryKey: ["movies", query, page],
+    queryFn: () => fetchMovies(query, page),
+    enabled: query.length > 0,
+    keepPreviousData: true,
+    onError: () => {
+      toast.error("Something went wrong. Please try again.");
+    },
+  });
 
-  // Обробник сабміту пошуку
   const handleSearch = (formData: FormData) => {
     const searchQuery = formData.get("query") as string;
 
@@ -46,13 +42,10 @@ function App() {
       return;
     }
 
-    // Оновлюємо query і скидаємо сторінку до 1
     setQuery(searchQuery.trim());
     setPage(1);
-    // refetch не потрібен, useQuery виконає запит автоматично
   };
 
-  // Обробник зміни сторінки пагінації
   const handlePageChange = ({ selected }: { selected: number }) => {
     setPage(selected + 1);
   };
@@ -71,7 +64,7 @@ function App() {
         <p>No movies found for your request.</p>
       )}
 
-      {!isLoading && !isError && data && data.results.length > 0 && (
+      {!isLoading && !isError && data?.results.length > 0 && (
         <>
           <MovieGrid
             movies={data.results}
