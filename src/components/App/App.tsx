@@ -19,6 +19,7 @@ function App() {
   const [page, setPage] = useState<number>(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
+
   const {
     data,
     isLoading,
@@ -34,6 +35,7 @@ function App() {
     },
   });
 
+
   const handleSearch = (formData: FormData) => {
     const searchQuery = formData.get("query") as string;
 
@@ -42,8 +44,9 @@ function App() {
       return;
     }
 
-    setQuery(searchQuery.trim());
+   
     setPage(1);
+  
   };
 
   const handlePageChange = ({ selected }: { selected: number }) => {
@@ -64,7 +67,7 @@ function App() {
         <p>No movies found for your request.</p>
       )}
 
-      {!isLoading && !isError && data?.results.length > 0 && (
+      {!isLoading && !isError && data && data.results.length > 0 && (
         <>
           <MovieGrid
             movies={data.results}
