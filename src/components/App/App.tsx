@@ -3,7 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import ReactPaginate from "react-paginate";
 import { useQuery } from "@tanstack/react-query";
 
-import type { Movie, MovieApiResponse } from "../../types/movie"; // ✅ Corrected type
+import type { Movie, MovieApiResponse } from "../../types/movie";
 import { fetchMovies } from "../../services/movieService";
 
 import SearchBar from "../SearchBar/SearchBar";
@@ -19,12 +19,7 @@ function App() {
   const [page, setPage] = useState<number>(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  const {
-    data,
-    isLoading,
-    isError,
-    isFetching,
-  } = useQuery<MovieApiResponse>({
+  const { data, isLoading, isError, isFetching } = useQuery<MovieApiResponse>({
     queryKey: ["movies", query, page],
     queryFn: () => fetchMovies(query, page),
     enabled: query.trim().length > 0,
@@ -88,10 +83,7 @@ function App() {
       )}
 
       {selectedMovie && (
-        <MovieModal
-          movie={selectedMovie}
-          onClose={() => setSelectedMovie(null)}
-        />
+        <MovieModal movie={selectedMovie} onClose={() => setSelectedMovie(null)} />
       )}
     </>
   );
