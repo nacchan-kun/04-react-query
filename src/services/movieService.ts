@@ -1,22 +1,18 @@
 import axios from 'axios';
-import type { Movie } from '../types/movie';
+import type { MovieApiResponse } from '../types/movie'; 
 
-export interface FetchMoviesResponse {
-  results: Movie[];
-  total_pages: number;
-}
 
 export const fetchMovies = async (
   query: string,
   page: number = 1
-): Promise<FetchMoviesResponse> => {
+): Promise<MovieApiResponse> => { 
   const token = import.meta.env.VITE_TMDB_TOKEN;
 
   if (!token) {
     throw new Error('TMDB API token is missing');
   }
 
-  const response = await axios.get<FetchMoviesResponse>(
+  const response = await axios.get<MovieApiResponse>(
     'https://api.themoviedb.org/3/search/movie',
     {
       params: {

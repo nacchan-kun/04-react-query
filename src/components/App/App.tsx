@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import ReactPaginate from "react-paginate";
-import { useQuery } from "@tanstack/react-query"; // Assuming v4/v5
+import { useQuery } from "@tanstack/react-query";
 
 import type { Movie, MovieApiResponse } from "../../types/movie";
 import { fetchMovies } from "../../services/movieService";
@@ -21,19 +21,20 @@ function App() {
 
   const { data, isLoading, isError, isFetching } = useQuery<
     MovieApiResponse,
-    Error // Explicitly define the error type
+    Error
   >({
     queryKey: ["movies", query, page],
     queryFn: () => fetchMovies(query, page),
     enabled: query.trim().length > 0,
-    // Fix: Replace keepPreviousData with placeholderData or previousData
-    placeholderData: (previousData) => previousData, // Keep previous data while fetching new
-    // OR if you want to use previousData option:
-    // previousData: true, // This option might require more careful handling of `data` being undefined initially when fetching new data
-    onError: () => {
-      toast.error("Something went wrong. Please try again.");
-    },
+    placeholderData: (previousData) => previousData,
   });
+
+  // Handle errors using useEffect for React Query v5
+  useEffect(() => {
+    if (isError) {
+      toast.error("Something went wrong. Please try again.");
+    }
+  }, [isError]);
 
   const handleSearch = (formData: FormData) => {
     const searchQuery = formData.get("query") as string;
@@ -61,18 +62,17 @@ function App() {
         <ErrorMessage message="Something went wrong. Please try again." />
       )}
 
-      {/* Ensure data?.results and data?.total_pages are accessed safely */}
       {!isLoading &&
         !isError &&
-        data && // Add a check for data existence
-        data.results && // Ensure results array exists
+        data &&
+        data.results &&
         data.results.length === 0 &&
         query && <p>No movies found for your request.</p>}
 
       {!isLoading &&
         !isError &&
-        data && // Add a check for data existence
-        data.results && // Ensure results array exists
+        data &&
+        data.results &&
         data.results.length > 0 && (
           <>
             <MovieGrid

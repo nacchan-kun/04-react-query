@@ -1,13 +1,12 @@
-// src/types/movie.d.ts or src/types/movie.ts
 export interface Movie {
   id: number;
   title: string;
-  poster_path?: string | null; // Often can be null if not available
-  backdrop_path?: string | null; // Often can be null if not available
+  poster_path?: string | null;
+  backdrop_path?: string | null;
   overview?: string;
-  release_date?: string; // Or Date if you parse it
+  release_date?: string;
   vote_average?: number;
-  // Add any other properties that your API returns for a Movie
+  // ... other movie properties from TMDB
 }
 
 export interface MovieApiResponse {
@@ -15,4 +14,5 @@ export interface MovieApiResponse {
   results: Movie[];
   total_pages: number;
   total_results: number;
+ 
 }
