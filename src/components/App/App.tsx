@@ -19,7 +19,12 @@ function App() {
   const [page, setPage] = useState<number>(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  const { data, isLoading, isError, isFetching } = useQuery<MovieApiResponse>({
+  const {
+    data,
+    isLoading,
+    isError,
+    isFetching,
+  } = useQuery<MovieApiResponse>({
     queryKey: ["movies", query, page],
     queryFn: () => fetchMovies(query, page),
     enabled: query.trim().length > 0,
@@ -55,11 +60,11 @@ function App() {
         <ErrorMessage message="Something went wrong. Please try again." />
       )}
 
-      {!isLoading && !isError && data?.results.length === 0 && query && (
+      {!isLoading && !isError && data?.results?.length === 0 && query && (
         <p>No movies found for your request.</p>
       )}
 
-      {!isLoading && !isError && data?.results.length > 0 && (
+      {!isLoading && !isError && data?.results?.length > 0 && (
         <>
           <MovieGrid
             movies={data.results}
