@@ -25,6 +25,8 @@
   "devDependencies": {
     "@types/node": "^24.0.0",
     "@types/react-dom": "^19.1.6",
-    "typescript": "^5.8.3"
+    "@vitejs/plugin-react-swc": "^3.10.2",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
   }
 }
