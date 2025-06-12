@@ -1,11 +1,18 @@
 import axios from 'axios';
-import type { MovieApiResponse } from '../types/movie'; 
+import type { Movie } from '../types/movie'; // Assuming your Movie interface is in types/movie.ts
 
+// Define and EXPORT MovieApiResponse interface locally
+export interface MovieApiResponse { // Added 'export' keyword here
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
 
 export const fetchMovies = async (
   query: string,
   page: number = 1
-): Promise<MovieApiResponse> => { 
+): Promise<MovieApiResponse> => {
   const token = import.meta.env.VITE_TMDB_TOKEN;
 
   if (!token) {

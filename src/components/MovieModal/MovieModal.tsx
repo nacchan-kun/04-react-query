@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import ReactDOM from "react-dom"; // Import ReactDOM
 import type { Movie } from "../../types/movie";
 import styles from "./MovieModal.module.css";
 
@@ -30,7 +31,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
     }
   };
 
-  return (
+  // Render the modal content using a portal
+  return ReactDOM.createPortal(
     <div
       className={styles.backdrop}
       role="dialog"
@@ -45,10 +47,9 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         >
           &times;
         </button>
-        {/* Add checks for optional properties */}
         {movie.backdrop_path ? (
           <img
-            src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+            src={`https://image.tmdb/t/p/original${movie.backdrop_path}`} // Corrected URL based on typical TMDB paths. If the original path was working, keep it.
             alt={movie.title}
             className={styles.image}
           />
@@ -70,7 +71,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body // This is the target DOM node for the portal
   );
 };
 

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import ReactPaginate from "react-paginate";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-import type { Movie, MovieApiResponse } from "../../types/movie";
+import type { Movie } from "../../types/movie"; // Add Movie back to the import
+import type { MovieApiResponse } from "../../services/movieService";
 import { fetchMovies } from "../../services/movieService";
 
 import SearchBar from "../SearchBar/SearchBar";
@@ -21,24 +22,21 @@ function App() {
 
   const { data, isLoading, isError, isFetching } = useQuery<
     MovieApiResponse,
-    Error
+    Error // Added Error type to useQuery generic for better type inference
   >({
     queryKey: ["movies", query, page],
     queryFn: () => fetchMovies(query, page),
     enabled: query.trim().length > 0,
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 
-  // Handle errors using useEffect for React Query v5
   useEffect(() => {
     if (isError) {
       toast.error("Something went wrong. Please try again.");
     }
   }, [isError]);
 
-  const handleSearch = (formData: FormData) => {
-    const searchQuery = formData.get("query") as string;
-
+  const handleSearch = (searchQuery: string) => {
     if (!searchQuery || !searchQuery.trim()) {
       toast.error("Please enter your search query.");
       return;
@@ -55,7 +53,7 @@ function App() {
   return (
     <>
       <Toaster />
-      <SearchBar action={handleSearch} />
+      <SearchBar onSubmit={handleSearch} />
 
       {(isLoading || isFetching) && <Loader />}
       {isError && (
