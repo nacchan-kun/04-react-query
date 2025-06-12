@@ -22,7 +22,7 @@ function App() {
 
   const { data, isLoading, isError, isFetching } = useQuery<
     MovieApiResponse,
-    Error // Added Error type to useQuery generic for better type inference
+    Error 
   >({
     queryKey: ["movies", query, page],
     queryFn: () => fetchMovies(query, page),
