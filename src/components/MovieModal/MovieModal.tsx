@@ -49,8 +49,8 @@ const MovieModal: React.FC<MovieModalProps> = ({ movie, onClose }) => {
         </button>
         {movie.backdrop_path ? (
           <img
-            src={`https://image.tmdb/t/p/original${movie.backdrop_path}`} // Corrected URL based on typical TMDB paths. If the original path was working, keep it.
-            alt={movie.title}
+          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+          alt={movie.title}
             className={styles.image}
           />
         ) : (
